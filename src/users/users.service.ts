@@ -210,13 +210,9 @@ export class UsersService {
   }
 
   //===================================//
-  generateOTP() {
-    try {
-      const otp = Math.floor(100000 + Math.random() * 900000);
-      return otp;
-    } catch (e: any) {
-      return e;
-    }
+  generateOTP(): number {
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    return otp;
   }
   verifyOTP(inputOtp: number, actualOtp: number) {
     try {
@@ -229,7 +225,7 @@ export class UsersService {
       return errorResponse(e);
     }
   }
-//=====================================//
+  //=====================================//
   async resetPassword(data: ResetPasswordDto): Future {
     try {
       const user = await this.userRepository.findOneBy({ mat_no: data.mat_no });
@@ -260,10 +256,10 @@ export class UsersService {
         user.email,
         'Your OTP Code',
         'otp',
-       undefined,
-       otp
+        undefined,
+        otp.toString(),
       );
-      user.otp = otp;
+      user.otp = otp.toString();
       await this.userRepository.save(user);
       return successResponse(`Email sent to ${user.email} successfully`, otp);
     } catch (e) {

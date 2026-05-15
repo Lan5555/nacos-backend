@@ -73,7 +73,7 @@ export class UsersController {
     return await this.usersService.sendOtp(user_id);
   }
   @Post('reset-password')
-  async resetPassword(data: ResetPasswordDto) {
+  async resetPassword(@Body() data: ResetPasswordDto) {
     return await this.usersService.resetPassword(data);
   }
 }
