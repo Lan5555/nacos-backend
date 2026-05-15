@@ -265,7 +265,15 @@ export class UsersService {
         email: user.email,
       });
     } catch (e) {
-      return errorResponse(e);
+      const brevoError =
+        (e as any)?.response?.body?.message ||
+        (e as any)?.response?.text ||
+        (e as any)?.message ||
+        'Unknown email error';
+
+      console.error('BREVO ERROR:', brevoError);
+
+      return errorResponse(brevoError);
     }
   }
 }
