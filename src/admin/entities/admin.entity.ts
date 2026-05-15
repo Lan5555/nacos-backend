@@ -15,6 +15,8 @@ export class Admin {
   @Column()
   level!: number;
   @Column()
+  department!: string;
+  @Column()
   createdAt!: Date;
   @Column()
   otp!: string;
