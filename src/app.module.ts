@@ -10,6 +10,7 @@ import { EventsModule } from './events/events.module';
 import { StudentNotificationsModule } from './student_notifications/student_notifications.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { MarketplaceModule } from './marketplace/marketplace.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { MarketplaceModule } from './marketplace/marketplace.module';
     NotificationsModule,
     StudentNotificationsModule,
     MarketplaceModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],
