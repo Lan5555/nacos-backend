@@ -12,6 +12,7 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly mailService: MailService,
   ) {}
 
   async createUser(body: CreateUserDto): Future {
@@ -249,18 +250,18 @@ export class UsersService {
   }
 
   async sendOtp(id: number): Future {
-    const mailService: MailService = new MailService();
     const otp = this.generateOTP();
     try {
       const user = await this.userRepository.findOneBy({ id });
       if (!user) {
         return errorResponse('User not Found');
       }
-      await mailService.sendMail(
+      await this.mailService.sendMail(
         user.email,
         'Your OTP Code',
         'otp',
-        mailService.otpTemplate(otp),
+       undefined,
+       otp
       );
       user.otp = otp;
       await this.userRepository.save(user);
