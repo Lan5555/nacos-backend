@@ -15,8 +15,8 @@ export class AdminService {
   async create(createAdminDto: CreateAdminDto): Future {
     try {
       const hashedPassword = await bcrypt.hash(createAdminDto.password, 10);
-      createAdminDto.password = hashedPassword;
-      const admin = this.adminRepository.create(createAdminDto);
+      const newDto = { ...createAdminDto, password: hashedPassword };
+      const admin = this.adminRepository.create(newDto);
       await this.adminRepository.save(admin);
       return successResponse('Admin Registered Successfully', admin);
     } catch (e) {
