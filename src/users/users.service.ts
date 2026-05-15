@@ -261,7 +261,9 @@ export class UsersService {
       );
       user.otp = otp.toString();
       await this.userRepository.save(user);
-      return successResponse(`Email sent to ${user.email} successfully`, otp);
+      return successResponse(`OTP sent successfully`, {
+        email: user.email,
+      });
     } catch (e) {
       return errorResponse(e);
     }
