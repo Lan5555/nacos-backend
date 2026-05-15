@@ -5,6 +5,7 @@ import {
   IsString,
   MinLength,
   IsBoolean,
+  IsNumber,
 } from 'class-validator';
 
 export class CreateAdminDto {
@@ -15,7 +16,8 @@ export class CreateAdminDto {
   @IsEmail()
   @IsNotEmpty()
   email!: string;
-
+  @IsNumber()
+  level!: number;
   @IsString()
   @IsNotEmpty()
   @MinLength(6)
