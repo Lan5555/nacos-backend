@@ -1,21 +1,18 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { Injectable } from '@nestjs/common';
-import * as nodemailer from 'nodemailer';
+import * as SibApiV3Sdk from '@sendinblue/client';
 
 @Injectable()
 export class MailService {
-  private transporter = nodemailer.createTransport({
-    host: 'smtp-relay.brevo.com',
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.BREVO_LOGIN,
-      pass: process.env.BREVO_PASS,
-    },
-  });
+  private apiInstance: SibApiV3Sdk.TransactionalEmailsApi;
+
+  constructor() {
+    this.apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+
+    this.apiInstance.setApiKey(
+      SibApiV3Sdk.TransactionalEmailsApiApiKeys.apiKey,
+      process.env.BREVO_API_KEY as string,
+    );
+  }
 
   async sendMail(
     to: string,
@@ -32,11 +29,14 @@ export class MailService {
       html = this.otpTemplate(otp ?? '');
     }
 
-    return await this.transporter.sendMail({
-      from: `"Nacos" <${process.env.BREVO_SENDER}>`,
-      to,
+    return await this.apiInstance.sendTransacEmail({
+      sender: {
+        email: process.env.BREVO_SENDER as string,
+        name: 'Nacos',
+      },
+      to: [{ email: to }],
       subject,
-      html,
+      htmlContent: html,
     });
   }
 
