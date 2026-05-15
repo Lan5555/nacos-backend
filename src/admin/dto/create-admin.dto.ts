@@ -22,6 +22,8 @@ export class CreateAdminDto {
   @IsNotEmpty()
   @MinLength(6)
   password!: string;
+  @IsString()
+  department!: string;
 
   @IsBoolean()
   @IsOptional()
