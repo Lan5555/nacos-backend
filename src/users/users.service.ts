@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto, ResetPasswordDto } from 'src/users/dto/user-dto';
@@ -274,6 +278,26 @@ export class UsersService {
       console.error('BREVO ERROR:', brevoError);
 
       return errorResponse(brevoError);
+    }
+  }
+
+  async verifyMatNo(mat_no: string): Future {
+    try {
+      const user = await this.userRepository.findOneBy({ mat_no });
+      if (!user) {
+        return errorResponse('User not found');
+      }
+      if (user.password == null) {
+        return successResponse('User does not have a password', {
+          id: user.id,
+          mat_no,
+          email: user.email,
+        });
+      } else {
+        return successResponse('User already has a password', null);
+      }
+    } catch (e) {
+      return errorResponse(e);
     }
   }
 }

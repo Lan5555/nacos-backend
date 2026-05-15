@@ -76,4 +76,8 @@ export class UsersController {
   async resetPassword(@Body() data: ResetPasswordDto) {
     return await this.usersService.resetPassword(data);
   }
+  @Get('verify-mat-no')
+  async verifyMatNumber(@Query('mat_no') mat_no: string) {
+    return await this.usersService.verifyMatNo(mat_no);
+  }
 }
