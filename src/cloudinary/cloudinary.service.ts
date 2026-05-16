@@ -63,7 +63,7 @@ export class CloudinaryService {
       }
       const downloadUrl = cloudinary.url(publicId, {
         resource_type: file.resourceType || 'raw',
-        type: file.format || 'auto',
+        type: 'upload',
         flags: 'attachment', // Forces the browser to download instead of opening
         secure: true, // Ensures the link uses HTTPS
         sign_url: true,
@@ -89,7 +89,7 @@ export class CloudinaryService {
 
       await cloudinary.uploader.destroy(publicId, {
         resource_type: file.resourceType || 'raw',
-        type: file.format || 'auto',
+        type: 'upload',
       });
 
       await this.fileRepository.remove(file);
