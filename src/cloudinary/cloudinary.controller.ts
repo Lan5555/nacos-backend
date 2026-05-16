@@ -1,5 +1,6 @@
 import {
   Controller,
+  Delete,
   Get,
   Post,
   Query,
@@ -32,7 +33,7 @@ export class CloudinaryController {
     return this.cloudinaryService.getDownloadUrl(publicId, resourceType);
   }
 
-  @Post('delete')
+  @Delete('delete')
   async deleteFile(@Query('publicId') publicId: string): Future {
     return this.cloudinaryService.deleteFile(publicId);
   }
