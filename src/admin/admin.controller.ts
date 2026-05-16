@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { CreateAdminDto } from './dto/create-admin.dto';
@@ -21,8 +22,8 @@ export class AdminController {
   }
 
   @Get('find-all')
-  findAll() {
-    return this.adminService.findAll();
+  findAll(@Query('isStaff') isStaff?: boolean, @Query('level') level?: number) {
+    return this.adminService.findAll(isStaff, level);
   }
 
   @Get('find-one/:id')

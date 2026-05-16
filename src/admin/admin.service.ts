@@ -46,12 +46,19 @@ export class AdminService {
     }
   }
 
-  async findAll(): Future {
+  async findAll(isStaff?: boolean, level?: number): Future {
     try {
-      const admin = await this.adminRepository.find();
-      if (!admin) {
+      const admin = await this.adminRepository.find({
+        where: {
+          isStaff: isStaff ?? false,
+          level: level ?? undefined,
+        },
+      });
+
+      if (admin.length === 0) {
         return errorResponse('No admins available');
       }
+
       const resData = admin.map((ad) => ({
         id: ad.id,
         name: ad.name,
@@ -60,12 +67,12 @@ export class AdminService {
         isStaff: ad.isStaff,
         createdAt: ad.createdAt,
       }));
+
       return successResponse('Admins queried successfully', resData);
     } catch (e) {
       return errorResponse(e);
     }
   }
-
   async findOne(id: number): Future {
     try {
       const admin = await this.adminRepository.findOneBy({ id });
