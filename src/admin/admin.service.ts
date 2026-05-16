@@ -130,6 +130,7 @@ export class AdminService {
         );
         const cloudFile = profileImage.data as CloudinaryFile;
         admin.profileImage = cloudFile.secureUrl;
+        admin.publicId = cloudFile.publicId;
       }
       Object.assign(admin, updateAdminDto);
       await this.adminRepository.save(admin);
