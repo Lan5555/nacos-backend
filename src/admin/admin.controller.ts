@@ -18,11 +18,10 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '@nestjs/passport';
 import { AdminGuard } from 'src/auth/admin.guard';
 
-@UseGuards(AuthGuard('jwt'), AdminGuard)
 @Controller('admin')
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
-
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
   @Post('create-admin')
   create(@Body() createAdminDto: CreateAdminDto) {
     return this.adminService.create(createAdminDto);
@@ -37,6 +36,7 @@ export class AdminController {
   findOne(@Param('id') id: string) {
     return this.adminService.findOne(+id);
   }
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
   @UseInterceptors(FileInterceptor('file'))
   @Patch('update/:id')
   update(
@@ -46,23 +46,27 @@ export class AdminController {
   ) {
     return this.adminService.update(+id, updateAdminDto, file);
   }
-
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
   @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.adminService.remove(+id);
   }
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
   @Get('make-rep')
   makeRep(@Query('id') id: number) {
     return this.adminService.makeRep(id);
   }
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
   @Get('remove-rep')
   removeRep(@Query('id') id: number) {
     return this.adminService.removeRep(id);
   }
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
   @Get('make-staff')
   makeStaff(@Query('id') id: number) {
     return this.adminService.makeStaff(id);
   }
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
   @Post('broadcast-notification')
   broadcastNotification(
     @Query('studentId') studentId: number,
