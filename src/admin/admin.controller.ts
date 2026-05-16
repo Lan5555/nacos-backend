@@ -51,19 +51,19 @@ export class AdminController {
   login(@Body() { email, password }: { email: string; password: string }) {
     return this.adminService.login(email, password);
   }
-  @Post('make-rep')
+  @Get('make-rep')
   makeRep(@Query('id') id: number) {
     return this.adminService.makeRep(id);
   }
-  @Post('remove-rep')
+  @Get('remove-rep')
   removeRep(@Query('id') id: number) {
     return this.adminService.removeRep(id);
   }
-  @Post('make-staff')
+  @Get('make-staff')
   makeStaff(@Query('id') id: number) {
     return this.adminService.makeStaff(id);
   }
-  @Post('broadcast-notification')
+  @Get('broadcast-notification')
   broadcastNotification(
     @Query('title') title: string,
     @Query('notification') notification: string,
