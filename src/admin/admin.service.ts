@@ -106,6 +106,11 @@ export class AdminService {
         admin.profileImage = cloudFile.secureUrl;
         admin.publicId = cloudFile.publicId;
       }
+      if (updateAdminDto.password) {
+        const hashedPassword = await bcrypt.hash(updateAdminDto.password, 10);
+        admin.password = hashedPassword;
+        delete updateAdminDto.password;
+      }
       Object.assign(admin, updateAdminDto);
       await this.adminRepository.save(admin);
       return successResponse('Successfully Updated', {
