@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 export type Future = Promise<Net>;
 
@@ -8,12 +9,32 @@ type Net = {
   error?: any;
 };
 
-export const errorResponse = (message: any): Net => ({
-  success: false,
-  message: message instanceof Error ? message.message : String(message),
-  data: null,
-  error: message instanceof Error ? message.message : String(message),
-});
+export const errorResponse = (error: any): Net => {
+  let message = 'An error occurred';
+  let errorData: any = null;
+
+  if (error instanceof Error) {
+    message = error.message;
+    errorData = {
+      name: error.name,
+      message: error.message,
+      stack: error.stack,
+    };
+  } else if (typeof error === 'string') {
+    message = error;
+    errorData = error;
+  } else if (typeof error === 'object' && error !== null) {
+    message = error.message || error.error || 'An error occurred';
+    errorData = error;
+  }
+
+  return {
+    success: false,
+    message,
+    data: null,
+    error: errorData,
+  };
+};
 
 export const successResponse = (message: string, data: any): Net => ({
   success: true,
