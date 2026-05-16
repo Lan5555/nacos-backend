@@ -47,32 +47,10 @@ export class CoursesService {
     }
   }
 
-  async createCourse(
-    createCourseDto: CreateCourseDto,
-    file: Express.Multer.File,
-  ): Future {
+  async createCourse(createCourseDto: CreateCourseDto): Future {
     try {
-      if (!file) {
-        return errorResponse('Course file is required');
-      }
-
-      const uploadResponse = await this.fileService.uploadFile(
-        file,
-        'course_files',
-      );
-      if (!uploadResponse.success) return uploadResponse;
-
-      const cloudFile = uploadResponse.data as CloudinaryFile;
-      const downloadUrlResponse = await this.fileService.getDownloadUrl(
-        cloudFile.publicId,
-      );
-      if (!downloadUrlResponse.success) return downloadUrlResponse;
-
-      const newCourse = await this.courseRepository.save({
-        ...createCourseDto,
-        file: cloudFile.publicId,
-        downloadUrl: downloadUrlResponse.data as string,
-      });
+      const course = this.courseRepository.create(createCourseDto);
+      const newCourse = await this.courseRepository.save(course);
       return successResponse('Course created successfully', newCourse);
     } catch (error) {
       console.error(error);
