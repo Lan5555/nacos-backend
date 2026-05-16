@@ -8,16 +8,16 @@ import { errorResponse, Future, successResponse } from 'src/helpers/helpers';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/entities/user-entities';
-import { NotificationsService } from 'src/notifications/notifications.service';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { CloudinaryFile } from 'src/cloudinary/entities/cloudinary-file.entity';
+import { StudentNotificationsService } from 'src/student_notifications/student_notifications.service';
 
 @Injectable()
 export class AdminService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
     private readonly studentService: UsersService,
-    private readonly notificationService: NotificationsService,
+    private readonly notificationService: StudentNotificationsService,
     private readonly cloudinaryService: CloudinaryService,
     @InjectRepository(Admin) private adminRepository: Repository<Admin>,
   ) {}
@@ -212,14 +212,23 @@ export class AdminService {
       return errorResponse(e);
     }
   }
-  async broadcastNotification(title: string, notification: string): Future {
+  async broadcastNotification(
+    studentId: number,
+    title: string,
+    notification: string,
+  ): Future {
     try {
+      const student = await this.userRepository.findOneBy({ id: studentId });
+      if (!student) {
+        return errorResponse('Student not found');
+      }
       const newNotification = await this.notificationService.createNotification(
+        student.mat_no,
         title,
         notification,
       );
       return successResponse(
-        'Notification sent successfully',
+        `Notification sent successfully to ${student.name}`,
         newNotification.data,
       );
     } catch (e) {

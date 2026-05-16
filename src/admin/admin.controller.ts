@@ -65,9 +65,14 @@ export class AdminController {
   }
   @Post('broadcast-notification')
   broadcastNotification(
+    @Query('studentId') studentId: number,
     @Query('title') title: string,
     @Body() { notification }: { notification: string },
   ) {
-    return this.adminService.broadcastNotification(title, notification);
+    return this.adminService.broadcastNotification(
+      studentId,
+      title,
+      notification,
+    );
   }
 }
