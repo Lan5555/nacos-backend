@@ -11,6 +11,7 @@ import { StudentNotificationsModule } from './student_notifications/student_noti
 import { NotificationsModule } from './notifications/notifications.module';
 import { MarketplaceModule } from './marketplace/marketplace.module';
 import { AdminModule } from './admin/admin.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { AdminModule } from './admin/admin.module';
     StudentNotificationsModule,
     MarketplaceModule,
     AdminModule,
+    CloudinaryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
