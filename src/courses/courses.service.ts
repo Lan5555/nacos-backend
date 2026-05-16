@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { CloudinaryFile } from 'src/cloudinary/entities/cloudinary-file.entity';
 import { CreateCourseDto } from 'src/courses/dto/course-dto';
 import { Course } from 'src/courses/entities/course-entites';
 import { errorResponse, Future, successResponse } from 'src/helpers/helpers';
@@ -8,6 +10,7 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class CoursesService {
   constructor(
+    private readonly fileService: CloudinaryService,
     @InjectRepository(Course) private courseRepository: Repository<Course>,
   ) {}
 
@@ -44,9 +47,20 @@ export class CoursesService {
     }
   }
 
-  async createCourse(course: CreateCourseDto): Future {
+  async createCourse(
+    createCourseDto: CreateCourseDto,
+    file: Express.Multer.File,
+  ): Future {
     try {
-      const newCourse = await this.courseRepository.save(course);
+      const uploadResponse = await this.fileService.uploadFile(
+        file,
+        'course_files',
+      );
+      const cloudFile = uploadResponse.data as CloudinaryFile;
+      const newCourse = await this.courseRepository.save({
+        ...createCourseDto,
+        file: cloudFile.publicId,
+      });
       return successResponse('Course created successfully', newCourse);
     } catch (error) {
       console.error(error);
@@ -54,13 +68,23 @@ export class CoursesService {
     }
   }
 
-  async updateCourse(id: number, course: Partial<CreateCourseDto>): Future {
+  async updateCourse(
+    id: number,
+    course: Partial<CreateCourseDto>,
+    file: Express.Multer.File,
+  ): Future {
     try {
       const existingCourse = await this.courseRepository.findOneBy({ id });
       if (existingCourse) {
+        const uploadResponse = await this.fileService.uploadFile(
+          file,
+          'course_files',
+        );
+        const cloudFile = uploadResponse.data as CloudinaryFile;
         const updatedCourse = await this.courseRepository.save({
           ...existingCourse,
           ...course,
+          file: cloudFile.publicId,
         });
         return successResponse('Course updated successfully', updatedCourse);
       } else {

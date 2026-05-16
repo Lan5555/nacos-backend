@@ -24,6 +24,10 @@ export class Course {
 
   @Column({ length: 100 })
   department!: string;
+  @Column()
+  description!: string;
+  @Column({ nullable: true })
+  file?: string;
 
   @CreateDateColumn()
   created_at!: Date;

@@ -18,4 +18,7 @@ export class CreateCourseDto {
   @IsString()
   @IsNotEmpty()
   department!: string;
+  @IsString()
+  @IsNotEmpty()
+  description!: string;
 }

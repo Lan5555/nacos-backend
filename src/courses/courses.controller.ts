@@ -1,6 +1,8 @@
 import { Body, Controller, Delete, Get, Post, Query } from '@nestjs/common';
 import { CoursesService } from './courses.service';
 import { CreateCourseDto } from 'src/courses/dto/course-dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { UploadedFile, UseInterceptors } from '@nestjs/common';
 
 @Controller('courses')
 export class CoursesController {
@@ -18,15 +20,21 @@ export class CoursesController {
     return await this.coursesService.findOneCourse(id);
   }
   @Post('create-course')
-  async createCourse(@Body() body: CreateCourseDto) {
-    return await this.coursesService.createCourse(body);
+  @UseInterceptors(FileInterceptor('file')) // 'file' is the field name for the uploaded file
+  async createCourse(
+    @Body() createCourseDto: CreateCourseDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return await this.coursesService.createCourse(createCourseDto, file);
   }
   @Post('update-course')
+  @UseInterceptors(FileInterceptor('file'))
   async updateCourse(
     @Query('id') id: number,
     @Body() body: Partial<CreateCourseDto>,
+    @UploadedFile() file: Express.Multer.File,
   ) {
-    return await this.coursesService.updateCourse(id, body);
+    return await this.coursesService.updateCourse(id, body, file);
   }
   @Delete('delete-course')
   async deleteCourse(@Query('id') id: number) {
