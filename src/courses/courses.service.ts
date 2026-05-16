@@ -56,14 +56,18 @@ export class CoursesService {
         file,
         'course_files',
       );
+      if (!uploadResponse.success) return uploadResponse;
+
       const cloudFile = uploadResponse.data as CloudinaryFile;
-      const downloadUrl = await this.fileService.getDownloadUrl(
+      const downloadUrlResponse = await this.fileService.getDownloadUrl(
         cloudFile.publicId,
       );
+      if (!downloadUrlResponse.success) return downloadUrlResponse;
+
       const newCourse = await this.courseRepository.save({
         ...createCourseDto,
         file: cloudFile.publicId,
-        downloadUrl: downloadUrl.data as string,
+        downloadUrl: downloadUrlResponse.data as string,
       });
       return successResponse('Course created successfully', newCourse);
     } catch (error) {
@@ -84,7 +88,7 @@ export class CoursesService {
       }
 
       let filePublicId = existingCourse.file;
-      let downloadUrl = '';
+      let downloadUrl = existingCourse.downloadUrl;
 
       // Only handle file upload if a new file is actually provided
       if (file) {
@@ -102,12 +106,12 @@ export class CoursesService {
 
         const cloudFile = uploadResponse.data as CloudinaryFile;
         filePublicId = cloudFile.publicId;
-        downloadUrl = (
-          await this.fileService.getDownloadUrl(cloudFile.publicId)
-        ).data as string;
+        const downloadUrlResponse = await this.fileService.getDownloadUrl(
+          cloudFile.publicId,
+        );
+        if (!downloadUrlResponse.success) return downloadUrlResponse;
+        downloadUrl = downloadUrlResponse.data as string;
       }
-
-      //Get downloadUrl
 
       // 3. Save the merged data
       const updatedCourse = await this.courseRepository.save({
