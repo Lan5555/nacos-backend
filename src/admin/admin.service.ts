@@ -156,6 +156,9 @@ export class AdminService {
       if (!admin) {
         return errorResponse('Admin not found');
       }
+      if (admin.publicId != null) {
+        await this.cloudinaryService.deleteFile(admin.publicId);
+      }
       await this.adminRepository.remove(admin);
       return successResponse('Successfully Deleted', null);
     } catch (e) {

@@ -25,5 +25,7 @@ export class Admin {
   @Column()
   otp!: string;
   @Column()
+  publicId!: string;
+  @Column()
   profileImage!: string;
 }
