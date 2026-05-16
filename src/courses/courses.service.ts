@@ -87,12 +87,8 @@ export class CoursesService {
         if (!uploadResponse.success) return uploadResponse;
 
         const cloudFile = uploadResponse.data as CloudinaryFile;
+        downloadUrl = cloudFile.secureUrl;
         filePublicId = cloudFile.publicId;
-        const downloadUrlResponse = await this.fileService.getDownloadUrl(
-          cloudFile.publicId,
-        );
-        if (!downloadUrlResponse.success) return downloadUrlResponse;
-        downloadUrl = downloadUrlResponse.data as string;
       }
 
       // 3. Save the merged data
