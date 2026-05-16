@@ -18,6 +18,10 @@ export class CloudinaryService {
 
   async uploadFile(file: Express.Multer.File, folder = 'uploads'): Future {
     try {
+      if (!file || !file.buffer) {
+        return errorResponse('No file provided for upload');
+      }
+
       const uploadResult = await new Promise<UploadApiResponse>(
         (resolve, reject) => {
           cloudinary.uploader

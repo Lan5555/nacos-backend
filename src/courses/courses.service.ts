@@ -52,6 +52,10 @@ export class CoursesService {
     file: Express.Multer.File,
   ): Future {
     try {
+      if (!file) {
+        return errorResponse('Course file is required');
+      }
+
       const uploadResponse = await this.fileService.uploadFile(
         file,
         'course_files',
