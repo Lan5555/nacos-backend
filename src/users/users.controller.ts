@@ -30,13 +30,6 @@ export class UsersController {
   async createUser(@Body() body: CreateUserDto) {
     return await this.usersService.createUser(body);
   }
-  @Post('login')
-  async login(
-    @Body() { mat_no, password }: { mat_no: string; password: string },
-  ) {
-    return await this.usersService.login(mat_no, password);
-  }
-
   @Get('v1/test')
   async test() {
     return await this.usersService.test();

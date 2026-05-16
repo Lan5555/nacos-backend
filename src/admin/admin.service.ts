@@ -33,32 +33,6 @@ export class AdminService {
     }
   }
 
-  async login(email: string, password: string): Future {
-    try {
-      const admin = await this.adminRepository.findOne({ where: { email } });
-      const isPasswordValid = admin
-        ? await bcrypt.compare(password, admin.password)
-        : false;
-      if (!admin || !isPasswordValid) {
-        return errorResponse('Invalid credentials');
-      }
-      return successResponse('Login successful', {
-        id: admin.id,
-        name: admin.name,
-        email: admin.email,
-        level: admin.level,
-        isStaff: admin.isStaff,
-        phone: admin.phone,
-        department: admin.department,
-        position: admin.position,
-        profileImage: admin.profileImage,
-        createdAt: admin.createdAt,
-      });
-    } catch (e) {
-      return errorResponse(e);
-    }
-  }
-
   async findAll(isStaff?: boolean, level?: number): Future {
     try {
       const admin = await this.adminRepository.find({

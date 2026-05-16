@@ -5,13 +5,16 @@ import {
   Post,
   Query,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { CloudinaryService } from './cloudinary.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import type { Future } from 'src/helpers/helpers';
 import type { Express } from 'express';
-
+import { AuthGuard } from '@nestjs/passport';
+import { AdminGuard } from 'src/auth/admin.guard';
+@UseGuards(AuthGuard('jwt'), AdminGuard)
 @Controller('cloud')
 export class CloudinaryController {
   constructor(private readonly cloudinaryService: CloudinaryService) {}

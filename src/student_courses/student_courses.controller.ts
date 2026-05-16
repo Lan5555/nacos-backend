@@ -1,6 +1,9 @@
-import { Controller, Delete, Get, Query } from '@nestjs/common';
+import { Controller, Delete, Get, Query, UseGuards } from '@nestjs/common';
 import { StudentCoursesService } from './student_courses.service';
+import { AuthGuard } from '@nestjs/passport';
+import { AdminGuard } from 'src/auth/admin.guard';
 
+@UseGuards(AuthGuard('jwt'), AdminGuard)
 @Controller('student-courses')
 export class StudentCoursesController {
   constructor(private readonly studentCoursesService: StudentCoursesService) {}

@@ -52,44 +52,6 @@ export class UsersService {
     }
   }
 
-  async login(mat_no: string, password: string): Future {
-    try {
-      const user = await this.userRepository.findOne({ where: { mat_no } });
-      const isPasswordValid = user
-        ? await bycrypt.compare(password, user.password)
-        : false;
-
-      if (!user || !isPasswordValid) {
-        return {
-          success: false,
-          message: 'Invalid credentials',
-          data: null,
-        };
-      }
-      return {
-        success: true,
-        message: 'Login successful',
-        data: {
-          id: user.id,
-          mat_no: user.mat_no,
-          name: user.name,
-          email: user.email,
-          department: user.department,
-          phone: user.phone,
-          level: user.level,
-          isAdmin: user.isAdmin,
-        },
-      };
-    } catch (e) {
-      return {
-        success: false,
-        message: e instanceof Error ? e.message : String(e),
-        data: null,
-        error: e instanceof Error ? e.message : String(e),
-      };
-    }
-  }
-
   async findAllUsers(level?: string, department?: string): Future {
     try {
       const users = await this.userRepository.find({

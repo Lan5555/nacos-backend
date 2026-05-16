@@ -1,8 +1,18 @@
-import { Body, Controller, Delete, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { CoursesService } from './courses.service';
 import { CreateCourseDto } from 'src/courses/dto/course-dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadedFile, UseInterceptors } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { AdminGuard } from 'src/auth/admin.guard';
 
 @Controller('courses')
 export class CoursesController {
@@ -19,10 +29,12 @@ export class CoursesController {
   async findOneCourse(@Query('id') id: number) {
     return await this.coursesService.findOneCourse(id);
   }
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
   @Post('create-course')
   async createCourse(@Body() createCourseDto: CreateCourseDto) {
     return await this.coursesService.createCourse(createCourseDto);
   }
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
   @Post('update-course')
   @UseInterceptors(FileInterceptor('file'))
   async updateCourse(
@@ -32,6 +44,7 @@ export class CoursesController {
   ) {
     return await this.coursesService.updateCourse(id, body, file);
   }
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
   @Delete('delete-course')
   async deleteCourse(@Query('id') id: number) {
     return await this.coursesService.deleteCourse(id);

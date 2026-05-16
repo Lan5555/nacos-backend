@@ -12,6 +12,7 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { MarketplaceModule } from './marketplace/marketplace.module';
 import { AdminModule } from './admin/admin.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
     MarketplaceModule,
     AdminModule,
     CloudinaryModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

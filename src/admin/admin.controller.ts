@@ -9,12 +9,16 @@ import {
   Query,
   UseInterceptors,
   UploadedFile,
+  UseGuards,
 } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { AuthGuard } from '@nestjs/passport';
+import { AdminGuard } from 'src/auth/admin.guard';
 
+@UseGuards(AuthGuard('jwt'), AdminGuard)
 @Controller('admin')
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
@@ -46,10 +50,6 @@ export class AdminController {
   @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.adminService.remove(+id);
-  }
-  @Post('login')
-  login(@Body() { email, password }: { email: string; password: string }) {
-    return this.adminService.login(email, password);
   }
   @Get('make-rep')
   makeRep(@Query('id') id: number) {
