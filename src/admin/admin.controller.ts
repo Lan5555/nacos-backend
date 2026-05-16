@@ -63,10 +63,10 @@ export class AdminController {
   makeStaff(@Query('id') id: number) {
     return this.adminService.makeStaff(id);
   }
-  @Get('broadcast-notification')
+  @Post('broadcast-notification')
   broadcastNotification(
     @Query('title') title: string,
-    @Query('notification') notification: string,
+    @Body() { notification }: { notification: string },
   ) {
     return this.adminService.broadcastNotification(title, notification);
   }
