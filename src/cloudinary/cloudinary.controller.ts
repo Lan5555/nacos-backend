@@ -9,7 +9,7 @@ import {
 import { CloudinaryService } from './cloudinary.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 
-@Controller('cloudinary')
+@Controller('cloud')
 export class CloudinaryController {
   constructor(private readonly cloudinaryService: CloudinaryService) {}
 
