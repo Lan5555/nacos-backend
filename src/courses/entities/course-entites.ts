@@ -28,7 +28,8 @@ export class Course {
   description!: string;
   @Column({ nullable: true })
   file?: string;
-
+  @Column()
+  downloadUrl!: string;
   @CreateDateColumn()
   created_at!: Date;
 
