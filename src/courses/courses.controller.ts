@@ -3,6 +3,7 @@ import { CoursesService } from './courses.service';
 import { CreateCourseDto } from 'src/courses/dto/course-dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadedFile, UseInterceptors } from '@nestjs/common';
+import { ParseJsonPipe } from 'src/helpers/helpers';
 
 @Controller('courses')
 export class CoursesController {
@@ -22,10 +23,10 @@ export class CoursesController {
   @Post('create-course')
   @UseInterceptors(FileInterceptor('file')) // 'file' is the field name for the uploaded file
   async createCourse(
-    @Body() createCourseDto: CreateCourseDto,
+    @Body('meta', ParseJsonPipe) meta: CreateCourseDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    return await this.coursesService.createCourse(createCourseDto, file);
+    return await this.coursesService.createCourse(meta, file);
   }
   @Post('update-course')
   @UseInterceptors(FileInterceptor('file'))

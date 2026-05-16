@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { PipeTransform, Injectable } from '@nestjs/common';
 export type Future = Promise<Net>;
 
 type Net = {
@@ -41,3 +43,17 @@ export const successResponse = (message: string, data: any): Net => ({
   message: message,
   data: data,
 });
+
+@Injectable()
+export class ParseJsonPipe implements PipeTransform {
+  transform(value: any) {
+    if (typeof value === 'string') {
+      try {
+        return JSON.parse(value);
+      } catch {
+        return value;
+      }
+    }
+    return value;
+  }
+}
