@@ -17,38 +17,42 @@ export class CloudinaryService {
   ) {}
 
   async uploadFile(file: Express.Multer.File, folder = 'uploads'): Future {
-    const uploadResult = await new Promise<UploadApiResponse>(
-      (resolve, reject) => {
-        cloudinary.uploader
-          .upload_stream(
-            {
-              folder,
-              resource_type: 'auto',
-            },
-            (error, result) => {
-              if (error || !result) {
-                return reject(
-                  new Error(error?.message || 'Cloudinary upload failed'),
-                );
-              }
-              resolve(result);
-            },
-          )
-          .end(file.buffer);
-      },
-    );
+    try {
+      const uploadResult = await new Promise<UploadApiResponse>(
+        (resolve, reject) => {
+          cloudinary.uploader
+            .upload_stream(
+              {
+                folder,
+                resource_type: 'auto',
+              },
+              (error, result) => {
+                if (error || !result) {
+                  return reject(
+                    new Error(error?.message || 'Cloudinary upload failed'),
+                  );
+                }
+                resolve(result);
+              },
+            )
+            .end(file.buffer);
+        },
+      );
 
-    const fileEntity = this.fileRepository.create({
-      name: file.originalname,
-      publicId: uploadResult.public_id,
-      url: uploadResult.url,
-      secureUrl: uploadResult.secure_url,
-      format: uploadResult.format,
-      resourceType: uploadResult.resource_type,
-    });
+      const fileEntity = this.fileRepository.create({
+        name: file.originalname,
+        publicId: uploadResult.public_id,
+        url: uploadResult.url,
+        secureUrl: uploadResult.secure_url,
+        format: uploadResult.format,
+        resourceType: uploadResult.resource_type,
+      });
 
-    await this.fileRepository.save(fileEntity);
-    return successResponse('File uploaded successfully', fileEntity);
+      await this.fileRepository.save(fileEntity);
+      return successResponse('File uploaded successfully', fileEntity);
+    } catch (e) {
+      return errorResponse(e);
+    }
   }
 
   async getDownloadUrl(

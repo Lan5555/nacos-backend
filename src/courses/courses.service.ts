@@ -71,25 +71,42 @@ export class CoursesService {
   async updateCourse(
     id: number,
     course: Partial<CreateCourseDto>,
-    file: Express.Multer.File,
+    file?: Express.Multer.File,
   ): Future {
     try {
       const existingCourse = await this.courseRepository.findOneBy({ id });
-      if (existingCourse) {
+      if (!existingCourse) {
+        return errorResponse('Course not found');
+      }
+
+      let filePublicId = existingCourse.file;
+
+      // Only handle file upload if a new file is actually provided
+      if (file) {
+        // 1. Delete the old file from Cloudinary and database if it exists
+        if (existingCourse.file) {
+          await this.fileService.deleteFile(existingCourse.file);
+        }
+
+        // 2. Upload the new file
         const uploadResponse = await this.fileService.uploadFile(
           file,
           'course_files',
         );
+        if (!uploadResponse.success) return uploadResponse;
+
         const cloudFile = uploadResponse.data as CloudinaryFile;
-        const updatedCourse = await this.courseRepository.save({
-          ...existingCourse,
-          ...course,
-          file: cloudFile.publicId,
-        });
-        return successResponse('Course updated successfully', updatedCourse);
-      } else {
-        return errorResponse('Course not found');
+        filePublicId = cloudFile.publicId;
       }
+
+      // 3. Save the merged data
+      const updatedCourse = await this.courseRepository.save({
+        ...existingCourse,
+        ...course,
+        file: filePublicId,
+      });
+
+      return successResponse('Course updated successfully', updatedCourse);
     } catch (error) {
       console.error(error);
       return errorResponse(error);
@@ -100,6 +117,11 @@ export class CoursesService {
     try {
       const existingCourse = await this.courseRepository.findOneBy({ id });
       if (existingCourse) {
+        // Cleanup associated Cloudinary file before deleting the course
+        if (existingCourse.file) {
+          await this.fileService.deleteFile(existingCourse.file);
+        }
+
         await this.courseRepository.remove(existingCourse);
         return successResponse('Course deleted successfully', null);
       } else {

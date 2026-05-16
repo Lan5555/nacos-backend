@@ -32,7 +32,7 @@ export class CoursesController {
   async updateCourse(
     @Query('id') id: number,
     @Body() body: Partial<CreateCourseDto>,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file?: Express.Multer.File,
   ) {
     return await this.coursesService.updateCourse(id, body, file);
   }
