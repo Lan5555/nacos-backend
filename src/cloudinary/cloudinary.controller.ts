@@ -44,4 +44,15 @@ export class CloudinaryController {
   async listFiles(@Query('publicId') publicId?: string): Future {
     return this.cloudinaryService.listFiles(publicId);
   }
+  @Get('list-all')
+  async listAllFiles(): Future {
+    return this.cloudinaryService.listAllFiles();
+  }
+  @Post('update')
+  async updateFile(
+    @Query('publicId') publicId: string,
+    @UploadedFile() newFile: Express.Multer.File,
+  ): Future {
+    return this.cloudinaryService.updateFile(publicId, newFile);
+  }
 }
