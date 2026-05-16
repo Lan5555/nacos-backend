@@ -26,11 +26,8 @@ export class CloudinaryController {
   }
 
   @Get('download-url')
-  async getDownloadUrl(
-    @Query('publicId') publicId: string,
-    @Query('resourceType') resourceType?: string,
-  ): Future {
-    return this.cloudinaryService.getDownloadUrl(publicId, resourceType);
+  async getDownloadUrl(@Query('publicId') publicId: string): Future {
+    return this.cloudinaryService.getDownloadUrl(publicId);
   }
 
   @Delete('delete')

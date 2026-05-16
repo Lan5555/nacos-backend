@@ -55,17 +55,15 @@ export class CloudinaryService {
     }
   }
 
-  async getDownloadUrl(
-    publicId: string,
-    resourceType: string = 'auto',
-  ): Future {
+  async getDownloadUrl(publicId: string): Future {
     try {
       const file = await this.fileRepository.findOne({ where: { publicId } });
       if (!file) {
         return errorResponse('File not found');
       }
       const downloadUrl = cloudinary.url(publicId, {
-        resource_type: resourceType,
+        resource_type: file.resourceType || 'raw',
+        type: file.format || 'auto',
         flags: 'attachment', // Forces the browser to download instead of opening
         secure: true, // Ensures the link uses HTTPS
         sign_url: true,
@@ -81,12 +79,21 @@ export class CloudinaryService {
 
   async deleteFile(publicId: string): Future {
     try {
-      const file = await this.fileRepository.findOne({ where: { publicId } });
+      const file = await this.fileRepository.findOne({
+        where: { publicId },
+      });
+
       if (!file) {
         return errorResponse('File not found');
       }
-      await cloudinary.uploader.destroy(publicId, { resource_type: 'auto' });
+
+      await cloudinary.uploader.destroy(publicId, {
+        resource_type: file.resourceType || 'raw',
+        type: file.format || 'auto',
+      });
+
       await this.fileRepository.remove(file);
+
       return successResponse('File deleted successfully', null);
     } catch (e) {
       return errorResponse(e);
