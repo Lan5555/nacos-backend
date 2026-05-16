@@ -48,6 +48,10 @@ export class AdminService {
         email: admin.email,
         level: admin.level,
         isStaff: admin.isStaff,
+        phone: admin.phone,
+        department: admin.department,
+        position: admin.position,
+        profileImage: admin.profileImage,
         createdAt: admin.createdAt,
       });
     } catch (e) {
@@ -74,6 +78,10 @@ export class AdminService {
         email: ad.email,
         level: ad.level,
         isStaff: ad.isStaff,
+        phone: ad.phone,
+        department: ad.department,
+        position: ad.position,
+        profileImage: ad.profileImage,
         createdAt: ad.createdAt,
       }));
 
@@ -94,6 +102,10 @@ export class AdminService {
         email: admin.email,
         level: admin.level,
         isStaff: admin.isStaff,
+        phone: admin.phone,
+        department: admin.department,
+        position: admin.position,
+        profileImage: admin.profileImage,
         createdAt: admin.createdAt,
       });
     } catch (e) {
@@ -127,6 +139,10 @@ export class AdminService {
         email: admin.email,
         level: admin.level,
         isStaff: admin.isStaff,
+        phone: admin.phone,
+        department: admin.department,
+        profileImage: admin.profileImage,
+        position: admin.position,
         createdAt: admin.createdAt,
       });
     } catch (e) {
