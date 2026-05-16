@@ -8,5 +8,6 @@ import { StudentNotification } from './entities/student-notification-entity';
   imports: [TypeOrmModule.forFeature([StudentNotification])],
   providers: [StudentNotificationsService],
   controllers: [StudentNotificationsController],
+  exports: [StudentNotificationsService],
 })
 export class StudentNotificationsModule {}
