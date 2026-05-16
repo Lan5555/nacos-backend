@@ -6,10 +6,16 @@ import { Admin } from './entities/admin.entity';
 import { Repository } from 'typeorm';
 import { errorResponse, Future, successResponse } from 'src/helpers/helpers';
 import * as bcrypt from 'bcrypt';
+import { UsersService } from 'src/users/users.service';
+import { User } from 'src/users/entities/user-entities';
+import { NotificationsService } from 'src/notifications/notifications.service';
 
 @Injectable()
 export class AdminService {
   constructor(
+    @InjectRepository(User) private userRepository: Repository<User>,
+    private readonly studentService: UsersService,
+    private readonly notificationService: NotificationsService,
     @InjectRepository(Admin) private adminRepository: Repository<Admin>,
   ) {}
   async create(createAdminDto: CreateAdminDto): Future {
@@ -121,6 +127,66 @@ export class AdminService {
       }
       await this.adminRepository.remove(admin);
       return successResponse('Successfully Deleted', null);
+    } catch (e) {
+      return errorResponse(e);
+    }
+  }
+  async makeRep(id: number): Future {
+    try {
+      const student = await this.userRepository.findOneBy({ id });
+      if (!student) {
+        return errorResponse('Student not found');
+      }
+      const update = await this.studentService.updateUser(student.mat_no, {
+        isAdmin: true,
+      });
+      return successResponse('Successfully made representative', update.data);
+    } catch (e) {
+      return errorResponse(e);
+    }
+  }
+
+  async removeRep(id: number): Future {
+    try {
+      const student = await this.userRepository.findOneBy({ id });
+      if (!student) {
+        return errorResponse('Student not found');
+      }
+      const update = await this.studentService.updateUser(student.mat_no, {
+        isAdmin: false,
+      });
+      return successResponse(
+        'Successfully removed representative',
+        update.data,
+      );
+    } catch (e) {
+      return errorResponse(e);
+    }
+  }
+  async makeStaff(id: number): Future {
+    try {
+      const admin = await this.adminRepository.findOneBy({ id });
+      if (!admin) {
+        return errorResponse('Admin not found');
+      }
+      await this.adminRepository.update(admin.id, {
+        isStaff: true,
+      });
+      return successResponse('Successfully made staff', admin);
+    } catch (e) {
+      return errorResponse(e);
+    }
+  }
+  async broadcastNotification(title: string, notification: string): Future {
+    try {
+      const newNotification = await this.notificationService.createNotification(
+        title,
+        notification,
+      );
+      return successResponse(
+        'Notification sent successfully',
+        newNotification.data,
+      );
     } catch (e) {
       return errorResponse(e);
     }
