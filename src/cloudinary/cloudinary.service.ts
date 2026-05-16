@@ -68,6 +68,7 @@ export class CloudinaryService {
         resource_type: resourceType,
         flags: 'attachment', // Forces the browser to download instead of opening
         secure: true, // Ensures the link uses HTTPS
+        sign_url: true,
       });
       return successResponse(
         'Download URL generated successfully',
