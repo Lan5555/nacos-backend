@@ -9,6 +9,8 @@ import * as bcrypt from 'bcrypt';
 import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/entities/user-entities';
 import { NotificationsService } from 'src/notifications/notifications.service';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { CloudinaryFile } from 'src/cloudinary/entities/cloudinary-file.entity';
 
 @Injectable()
 export class AdminService {
@@ -16,6 +18,7 @@ export class AdminService {
     @InjectRepository(User) private userRepository: Repository<User>,
     private readonly studentService: UsersService,
     private readonly notificationService: NotificationsService,
+    private readonly cloudinaryService: CloudinaryService,
     @InjectRepository(Admin) private adminRepository: Repository<Admin>,
   ) {}
   async create(createAdminDto: CreateAdminDto): Future {
@@ -98,11 +101,23 @@ export class AdminService {
     }
   }
 
-  async update(id: number, updateAdminDto: UpdateAdminDto): Future {
+  async update(
+    id: number,
+    updateAdminDto: UpdateAdminDto,
+    file?: Express.Multer.File,
+  ): Future {
     try {
       const admin = await this.adminRepository.findOneBy({ id });
       if (!admin) {
         return errorResponse('Admin not found');
+      }
+      if (file) {
+        const profileImage = await this.cloudinaryService.uploadFile(
+          file,
+          'excos',
+        );
+        const cloudFile = profileImage.data as CloudinaryFile;
+        admin.profileImage = cloudFile.secureUrl;
       }
       Object.assign(admin, updateAdminDto);
       await this.adminRepository.save(admin);

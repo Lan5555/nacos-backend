@@ -7,10 +7,13 @@ import {
   Param,
   Delete,
   Query,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('admin')
 export class AdminController {
@@ -30,10 +33,14 @@ export class AdminController {
   findOne(@Param('id') id: string) {
     return this.adminService.findOne(+id);
   }
-
+  @UseInterceptors(FileInterceptor('file'))
   @Patch('update/:id')
-  update(@Param('id') id: string, @Body() updateAdminDto: UpdateAdminDto) {
-    return this.adminService.update(+id, updateAdminDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateAdminDto: UpdateAdminDto,
+    @UploadedFile() file?: Express.Multer.File,
+  ) {
+    return this.adminService.update(+id, updateAdminDto, file);
   }
 
   @Delete('delete/:id')

@@ -24,6 +24,10 @@ export class CreateAdminDto {
   password!: string;
   @IsString()
   department!: string;
+  @IsString()
+  position!: string;
+  @IsString()
+  phone!: string;
 
   @IsBoolean()
   @IsOptional()

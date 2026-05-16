@@ -17,7 +17,13 @@ export class Admin {
   @Column()
   department!: string;
   @Column()
+  position!: string;
+  @Column()
+  phone!: string;
+  @Column()
   createdAt!: Date;
   @Column()
   otp!: string;
+  @Column()
+  profileImage!: string;
 }
