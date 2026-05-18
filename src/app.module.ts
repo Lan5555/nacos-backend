@@ -13,6 +13,8 @@ import { MarketplaceModule } from './marketplace/marketplace.module';
 import { AdminModule } from './admin/admin.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { AuthModule } from './auth/auth.module';
+import { ContactModule } from './contact/contact.module';
+import { ResultsModule } from './results/results.module';
 
 @Module({
   imports: [
@@ -38,6 +40,8 @@ import { AuthModule } from './auth/auth.module';
     AdminModule,
     CloudinaryModule,
     AuthModule,
+    ContactModule,
+    ResultsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

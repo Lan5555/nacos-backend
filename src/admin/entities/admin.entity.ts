@@ -28,4 +28,6 @@ export class Admin {
   publicId!: string;
   @Column()
   profileImage!: string;
+  @Column()
+  adminLevel!: string;
 }
