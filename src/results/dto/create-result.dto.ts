@@ -18,5 +18,5 @@ export class CreateResultDto {
   department!: string;
   @IsOptional()
   @IsString()
-  file?: string;
+  file!: string;
 }
