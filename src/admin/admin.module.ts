@@ -7,6 +7,7 @@ import { UsersModule } from 'src/users/users.module';
 import { User } from 'src/users/entities/user-entities';
 import { CloudinaryModule } from 'src/cloudinary/cloudinary.module';
 import { StudentNotificationsModule } from 'src/student_notifications/student_notifications.module';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { StudentNotificationsModule } from 'src/student_notifications/student_no
     UsersModule,
     StudentNotificationsModule,
     CloudinaryModule,
+    AuthModule,
   ],
   controllers: [AdminController],
   providers: [AdminService],

@@ -9,9 +9,10 @@ import {
 } from '@nestjs/common';
 
 @Injectable()
-class SuperAdminGuard implements CanActivate {
+export class SuperAdminGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
     const req = context.switchToHttp().getRequest();
+    console.log(req.user);
 
     if (!req.user) {
       throw new UnauthorizedException('Not logged in');
@@ -24,5 +25,3 @@ class SuperAdminGuard implements CanActivate {
     return true;
   }
 }
-
-export { SuperAdminGuard };

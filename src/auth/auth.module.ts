@@ -12,6 +12,8 @@ import { Admin } from 'src/admin/entities/admin.entity';
 import { User } from 'src/users/entities/user-entities';
 
 import { JwtStrategy } from './jwt.strategy';
+import { AdminGuard } from './guards/admin.guard';
+import { SuperAdminGuard } from './guards/super_admin.guard';
 
 @Module({
   imports: [
@@ -30,8 +32,14 @@ import { JwtStrategy } from './jwt.strategy';
 
   controllers: [AuthController],
 
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, AdminGuard, SuperAdminGuard],
 
-  exports: [AuthService, JwtModule],
+  exports: [
+    AuthService,
+    JwtModule,
+    PassportModule,
+    AdminGuard,
+    SuperAdminGuard,
+  ],
 })
 export class AuthModule {}

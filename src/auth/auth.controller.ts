@@ -12,8 +12,8 @@ export class AuthController {
   }
   @Post('login-user')
   async loginUser(
-    @Body() { email, password }: { email: string; password: string },
+    @Body() { mat_no, password }: { mat_no: string; password: string },
   ) {
-    return await this.authService.loginUser(email, password);
+    return await this.authService.loginUser(mat_no, password);
   }
 }

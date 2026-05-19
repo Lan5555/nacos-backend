@@ -4,9 +4,10 @@ import { CloudinaryService } from './cloudinary.service';
 import { CloudinaryController } from './cloudinary.controller';
 import { CloudinaryFile } from './entities/cloudinary-file.entity';
 import { v2 as cloudinary } from 'cloudinary';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CloudinaryFile])],
+  imports: [TypeOrmModule.forFeature([CloudinaryFile]), AuthModule],
   controllers: [CloudinaryController],
   providers: [
     CloudinaryService,

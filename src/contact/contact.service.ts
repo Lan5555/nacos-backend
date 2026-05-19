@@ -67,15 +67,27 @@ export class ContactService {
   async sendEmail(body: SendEmailDto) {
     try {
       const nacosEmail = await this.contactRepository.findOneBy({ id: 1 });
+
       if (!nacosEmail) {
         return errorResponse('Oops something went wrong');
       }
+
+      const message = `
+      Name: ${body.firstName} ${body.lastName}
+      
+      Email: ${body.email}
+      
+      Message:
+      ${body.message}
+    `;
+
       await this.mailService.sendMail(
         nacosEmail.email,
         body.subject,
         'info',
-        `${body.firstName} ${body.lastName} and email ${body.email} Sent a mail with message ${body.message}`,
+        message,
       );
+
       return successResponse('Email sent successfully', null);
     } catch (e) {
       return errorResponse(e);
