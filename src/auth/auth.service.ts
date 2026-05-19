@@ -48,6 +48,7 @@ export class AuthService {
         email: admin.email,
         isStaff: admin.isStaff,
         role: 'admin',
+        adminLevel: admin.adminLevel,
       };
 
       /**
@@ -68,6 +69,7 @@ export class AuthService {
           department: admin.department,
           position: admin.position,
           profileImage: admin.profileImage,
+          adminLevel: admin.adminLevel,
           createdAt: admin.createdAt,
         },
       });

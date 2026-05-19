@@ -29,5 +29,5 @@ export class Admin {
   @Column()
   profileImage!: string;
   @Column()
-  adminLevel!: string;
+  adminLevel!: number;
 }

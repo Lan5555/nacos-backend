@@ -16,12 +16,13 @@ import { CreateAdminDto } from './dto/create-admin.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '@nestjs/passport';
-import { AdminGuard } from 'src/auth/admin.guard';
+import { AdminGuard } from 'src/auth/guards/admin.guard';
+import { SuperAdminGuard } from 'src/auth/guards/super_admin.guard';
 
 @Controller('admin')
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
-  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  @UseGuards(AuthGuard('jwt'), SuperAdminGuard)
   @Post('create-admin')
   create(@Body() createAdminDto: CreateAdminDto) {
     return this.adminService.create(createAdminDto);
@@ -46,22 +47,22 @@ export class AdminController {
   ) {
     return this.adminService.update(+id, updateAdminDto, file);
   }
-  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  @UseGuards(AuthGuard('jwt'), SuperAdminGuard)
   @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.adminService.remove(+id);
   }
-  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  @UseGuards(AuthGuard('jwt'), SuperAdminGuard)
   @Get('make-rep')
   makeRep(@Query('id') id: number) {
     return this.adminService.makeRep(id);
   }
-  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  @UseGuards(AuthGuard('jwt'), SuperAdminGuard)
   @Get('remove-rep')
   removeRep(@Query('id') id: number) {
     return this.adminService.removeRep(id);
   }
-  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  @UseGuards(AuthGuard('jwt'), SuperAdminGuard)
   @Get('make-staff')
   makeStaff(@Query('id') id: number) {
     return this.adminService.makeStaff(id);
@@ -78,5 +79,10 @@ export class AdminController {
       title,
       notification,
     );
+  }
+  @UseGuards(AuthGuard('jwt'), SuperAdminGuard)
+  @Get('make-super-admin')
+  makeSuperAdmin(@Query('id') id: number) {
+    return this.adminService.makeSuperAdmin(id);
   }
 }

@@ -32,4 +32,7 @@ export class CreateAdminDto {
   @IsBoolean()
   @IsOptional()
   isStaff?: boolean;
+
+  @IsOptional()
+  adminLevel?: number;
 }

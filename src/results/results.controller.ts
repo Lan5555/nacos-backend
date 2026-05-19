@@ -15,7 +15,7 @@ import { CreateResultDto } from './dto/create-result.dto';
 import { UpdateResultDto } from './dto/update-result.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '@nestjs/passport';
-import { AdminGuard } from 'src/auth/admin.guard';
+import { AdminGuard } from 'src/auth/guards/admin.guard';
 
 @Controller('results')
 export class ResultsController {

@@ -1,7 +1,7 @@
 import { Controller, Delete, Get, Query, UseGuards } from '@nestjs/common';
 import { StudentCoursesService } from './student_courses.service';
 import { AuthGuard } from '@nestjs/passport';
-import { AdminGuard } from 'src/auth/admin.guard';
+import { AdminGuard } from 'src/auth/guards/admin.guard';
 
 @UseGuards(AuthGuard('jwt'), AdminGuard)
 @Controller('student-courses')

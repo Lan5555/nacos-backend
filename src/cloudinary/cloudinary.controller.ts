@@ -13,7 +13,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import type { Future } from 'src/helpers/helpers';
 import type { Express } from 'express';
 import { AuthGuard } from '@nestjs/passport';
-import { AdminGuard } from 'src/auth/admin.guard';
+import { AdminGuard } from 'src/auth/guards/admin.guard';
 @UseGuards(AuthGuard('jwt'), AdminGuard)
 @Controller('cloud')
 export class CloudinaryController {

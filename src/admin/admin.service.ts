@@ -214,4 +214,19 @@ export class AdminService {
       return errorResponse(e);
     }
   }
+  async makeSuperAdmin(id: number): Future {
+    try {
+      const admin = await this.adminRepository.findOneBy({ id });
+      if (!admin) {
+        return errorResponse('Admin not found');
+      }
+
+      await this.adminRepository.update(admin.id, {
+        adminLevel: 2,
+      });
+      return successResponse('Successfully made super admin', admin);
+    } catch (e) {
+      return errorResponse(e);
+    }
+  }
 }

@@ -12,7 +12,7 @@ import { CreateCourseDto } from 'src/courses/dto/course-dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadedFile, UseInterceptors } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { AdminGuard } from 'src/auth/admin.guard';
+import { AdminGuard } from 'src/auth/guards/admin.guard';
 
 @Controller('courses')
 export class CoursesController {
