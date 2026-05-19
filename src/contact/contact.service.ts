@@ -74,7 +74,7 @@ export class ContactService {
         nacosEmail.email,
         body.subject,
         'info',
-        `${body.firstName} ${body.lastName} Sent a mail with message ${body.message}`,
+        `${body.firstName} ${body.lastName} and email ${body.email} Sent a mail with message ${body.message}`,
       );
       return successResponse('Email sent successfully', null);
     } catch (e) {
