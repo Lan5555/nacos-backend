@@ -22,7 +22,6 @@ export class ResultsController {
   constructor(private readonly resultsService: ResultsService) {}
 
   @UseGuards(AuthGuard('jwt'), AdminGuard)
-  @UseInterceptors(FileInterceptor('file'))
   @Post('save-result')
   create(@Body() createResultDto: CreateResultDto) {
     return this.resultsService.create(createResultDto);
