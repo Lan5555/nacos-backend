@@ -17,7 +17,7 @@ class SuperAdminGuard implements CanActivate {
       throw new UnauthorizedException('Not logged in');
     }
 
-    if (req.user.role !== 'admin' || req.user.adminLevel !== 2) {
+    if (req.user.role !== 'admin' || Number(req.user.adminLevel) !== 2) {
       throw new UnauthorizedException('Super admins only');
     }
 
