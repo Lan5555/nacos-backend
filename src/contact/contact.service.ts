@@ -1,16 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { CreateContactDto } from './dto/create-contact.dto';
+import { CreateContactDto, SendEmailDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Contact } from './entities/contact.entity';
 import { Repository } from 'typeorm';
 import { errorResponse, Future, successResponse } from 'src/helpers/helpers';
+import { MailService } from 'src/workers/email-service';
 
 @Injectable()
 export class ContactService {
   constructor(
     @InjectRepository(Contact)
     private readonly contactRepository: Repository<Contact>,
+    private readonly mailService: MailService,
   ) {}
 
   async create(createContactDto: CreateContactDto): Future {
@@ -58,6 +60,23 @@ export class ContactService {
       if (!contact) return errorResponse('Contact not found');
       await this.contactRepository.remove(contact);
       return successResponse('Contact deleted successfully', null);
+    } catch (e) {
+      return errorResponse(e);
+    }
+  }
+  async sendEmail(body: SendEmailDto) {
+    try {
+      const nacosEmail = await this.contactRepository.findOneBy({ id: 1 });
+      if (!nacosEmail) {
+        return errorResponse('Oops something went wrong');
+      }
+      await this.mailService.sendMail(
+        nacosEmail.email,
+        body.subject,
+        'info',
+        `${body.firstName} ${body.lastName} Sent a mail with message ${body.message}`,
+      );
+      return successResponse('Email sent successfully', null);
     } catch (e) {
       return errorResponse(e);
     }

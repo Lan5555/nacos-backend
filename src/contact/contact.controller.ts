@@ -9,7 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ContactService } from './contact.service';
-import { CreateContactDto } from './dto/create-contact.dto';
+import { CreateContactDto, SendEmailDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
 import { SuperAdminGuard } from 'src/auth/guards/super_admin.guard';
 import { AuthGuard } from '@nestjs/passport';
@@ -42,5 +42,9 @@ export class ContactController {
   @Delete('delete-contact/:id')
   remove(@Param('id') id: string) {
     return this.contactService.remove(+id);
+  }
+  @Post('send-email')
+  sendMail(@Body() body: SendEmailDto) {
+    return this.contactService.sendEmail(body);
   }
 }

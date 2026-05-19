@@ -16,3 +16,23 @@ export class CreateContactDto {
   @IsNotEmpty()
   hours!: string;
 }
+
+export class SendEmailDto {
+  @IsString()
+  @IsNotEmpty()
+  firstName!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  lastName!: string;
+  @IsNotEmpty()
+  @IsString()
+  subject!: string;
+
+  @IsEmail()
+  @IsNotEmpty()
+  email!: string;
+  @IsNotEmpty()
+  @IsString()
+  message!: string;
+}
