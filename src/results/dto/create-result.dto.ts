@@ -19,4 +19,9 @@ export class CreateResultDto {
   @IsOptional()
   @IsString()
   file!: string;
+
+  @IsString()
+  session!: string;
+  @IsString()
+  semester!: string;
 }

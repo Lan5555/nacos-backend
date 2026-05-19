@@ -43,4 +43,9 @@ export class Result {
     type: 'timestamp',
   })
   createdAt!: Date;
+
+  @Column()
+  session!: string;
+  @Column()
+  semester!: string;
 }
