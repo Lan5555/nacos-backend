@@ -56,6 +56,7 @@ export class AdminService {
         department: ad.department,
         position: ad.position,
         profileImage: ad.profileImage,
+        adminLevel: ad.adminLevel,
         createdAt: ad.createdAt,
       }));
 
@@ -80,6 +81,7 @@ export class AdminService {
         department: admin.department,
         position: admin.position,
         profileImage: admin.profileImage,
+        adminLevel: admin.adminLevel,
         createdAt: admin.createdAt,
       });
     } catch (e) {
